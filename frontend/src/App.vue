@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import AppSidebar from './components/AppSidebar.vue'
 import VideoToMarkdown from './components/VideoToMarkdown/index.vue'
 import TaskDetail from './components/VideoToMarkdown/TaskDetail.vue'
+import { eventBus } from './utils/eventBus'
 
 const activeMenu = ref('new-task')
 const isChatOpen = ref(false)
@@ -31,6 +32,13 @@ const handleViewTask = (task) => {
   previousMenu.value = activeMenu.value
   activeMenu.value = 'task-detail'
 }
+
+onMounted(() => {
+  eventBus.on('view-task', handleViewTask)
+})
+onBeforeUnmount(() => {
+  eventBus.off('view-task', handleViewTask)
+})
 </script>
 
 <template>
@@ -95,7 +103,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f5f7fa;
+  background-color: #ffffff;
   width: 100%;
   height: auto;
   overflow-y: auto;
@@ -105,7 +113,7 @@ body {
 html {
   width: 100%;
   height: auto;
-  background-color: #f5f7fa;
+  background-color: #ffffff;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -114,7 +122,7 @@ html {
   width: 100vw;
   min-height: auto;
   position: relative;
-  background-color: #f5f7fa;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
   max-width: 100%;
